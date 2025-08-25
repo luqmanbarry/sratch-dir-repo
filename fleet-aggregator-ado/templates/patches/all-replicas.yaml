@@ -1,0 +1,9 @@
+{{- range $svc := .Values.services }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $svc.name }}
+spec:
+  replicas: {{ default $.Values.defaultReplicas $svc.replicas }}
+{{- end }}

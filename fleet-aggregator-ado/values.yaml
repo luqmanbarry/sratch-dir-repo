@@ -1,0 +1,50 @@
+# Default replicas if omitted on a service
+defaultReplicas: 1
+
+# How to access ADO Git. Per-service can override protocol if needed.
+# protocol: "ssh" or "https"
+defaults:
+  protocol: "ssh"
+
+# Services list. Each service points to an ADO Git repo/path/ref.
+# ADO Git URL anatomy:
+#   SSH   : git@ssh.dev.azure.com:v3/<org>/<project>/<repo>
+#   HTTPS : https://dev.azure.com/<org>/<project>/_git/<repo>
+#
+# Kustomize remote format:
+#   git::<GIT_URL>//<path>?ref=<branch|tag|commit>
+#
+# path: directory inside the repo containing raw YAML or a Kustomize base
+# ref : branch, tag, or commit
+services:
+  - name: users
+    org: acme
+    project: commerce
+    repo: users-service
+    path: deploy/k8s/base
+    ref: main
+    replicas: 5
+    # protocol: "ssh"   # (optional) override defaults.protocol
+
+  - name: orders
+    org: acme
+    project: commerce
+    repo: orders-service
+    path: manifests
+    ref: release-2025-08
+    replicas: 3
+
+  - name: payments
+    org: acme
+    project: finance
+    repo: payments
+    path: ops/k8s
+    ref: main
+    # replicas omitted -> uses defaultReplicas
+
+# If your Deployments’ names don’t match a predictable pattern, list them explicitly per service:
+deploymentNameOverrides: {}
+# Example:
+# deploymentNameOverrides:
+#   users: ["users-api", "users-worker"]
+#   payments: ["payments"]

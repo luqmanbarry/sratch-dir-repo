@@ -1,0 +1,7 @@
+apiVersion: v2
+name: fleet-aggregator-ado
+description: Aggregates microservice manifests from Azure DevOps Git and patches replicas via Kustomize
+type: application
+version: 0.2.0
+appVersion: "1.0.0"
+
