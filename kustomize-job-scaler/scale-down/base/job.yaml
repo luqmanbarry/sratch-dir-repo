@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: scale-down
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        job: scale-down
+    spec:
+      serviceAccountName: scaler
+      restartPolicy: Never
+      containers:
+        - name: runner
+          # Choose an oc image matching your OCP minor
+          # image: registry.redhat.io/openshift4/ose-cli:4.15
+          image: quay.io/openshift/origin-cli
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/bash", "/scripts/run-scale.sh"]
+          volumeMounts:
+            - name: script
+              mountPath: /scripts
+            - name: targets
+              mountPath: /config
+      volumes:
+        - name: script
+          configMap:
+            name: scale-down-script
+            defaultMode: 0755
+            items:
+              - key: run-scale.sh
+                path: run-scale.sh
+        - name: targets
+          configMap:
+            name: scale-down-targets
