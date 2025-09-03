@@ -27,7 +27,7 @@ spec:
             - name: script
               mountPath: /scripts
             - name: targets
-              mountPath: /config
+              mountPath: /scripts
       volumes:
         - name: script
           configMap:
