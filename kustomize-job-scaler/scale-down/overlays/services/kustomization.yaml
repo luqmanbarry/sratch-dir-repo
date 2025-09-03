@@ -8,6 +8,9 @@ configMapGenerator:
   - name: scale-down-targets
     files:
       - targets.txt
+  - name: scale-down-settings
+    literals:
+      - replicas=0   # <-- change this to any non-negative integer if desired
 
 generatorOptions:
   disableNameSuffixHash: true

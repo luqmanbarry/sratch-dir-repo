@@ -13,11 +13,16 @@ spec:
       restartPolicy: Never
       containers:
         - name: runner
-          # Choose an oc image matching your OCP minor
-          # image: registry.redhat.io/openshift4/ose-cli:4.15
-          image: quay.io/openshift/origin-cli
+          image: quay.io/openshift/origin-cli:4.15
           imagePullPolicy: IfNotPresent
           command: ["/bin/bash", "/scripts/run-scale.sh"]
+          env:
+            - name: REPLICAS
+              valueFrom:
+                configMapKeyRef:
+                  name: scale-down-settings   # provided by overlay
+                  key: replicas
+                  optional: true              # if missing, script defaults to 0
           volumeMounts:
             - name: script
               mountPath: /scripts
